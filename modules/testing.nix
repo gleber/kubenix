@@ -7,7 +7,7 @@ let
 
   toJSONFile = content: builtins.toFile "json" (builtins.toJSON content);
 
-  nixosTesting = import "${nixosPath}/lib/testing.nix" {
+  nixosTesting = import "${nixosPath}/lib/testing-python.nix" {
     inherit pkgs;
     system = "x86_64-linux";
   };
@@ -101,12 +101,11 @@ let
       };
 
       testScript = ''
-        startAll;
+        start_all()
 
-        $kube->waitUntilSucceeds("kubectl get node kube.my.xzy | grep -w Ready");
+        kube.wait_until_succeeds("kubectl get node kube.my.xzy | grep -w Ready")
 
-        ${testScript}
-      '';
+        ${testScript}''; # can not have a leading newline due to formatting requirements
     };
 
   testOptions = { config, ... }: let
