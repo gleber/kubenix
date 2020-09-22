@@ -1,4 +1,6 @@
-{ kubenix ? import ../.. {}, registry ? "docker.io/gatehub" }:
+{ pkgsPath
+, kubenix ? import ../.. {inherit pkgsPath;}
+, registry ? "" }:
 
 with kubenix.lib;
 

@@ -1,4 +1,5 @@
-{ pkgs ? import <nixpkgs> {}, nixosPath ? toString <nixpkgs/nixos>, lib ? pkgs.lib
+{ pkgs # ? import <nixpkgs> {}
+, nixosPath ? toString <nixpkgs/nixos>, lib ? pkgs.lib
 , e2e ? true, throwError ? true }:
 
 with lib;

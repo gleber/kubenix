@@ -1,4 +1,4 @@
-{ pkgs ? import <nixpkgs> {}
+{ pkgs # ? import <nixpkgs> {}
 , lib ? pkgs.lib
 , kubenix ? import ../. { inherit pkgs lib; }
 , k8sVersion ? "1.18"
@@ -29,6 +29,7 @@ let
           ./k8s/order.nix
           ./k8s/submodule.nix
           ./k8s/imports.nix
+          ./k8s/noop.nix
           ./legacy/k8s.nix
           ./legacy/crd.nix
           ./legacy/modules.nix

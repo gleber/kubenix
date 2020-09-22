@@ -3,6 +3,7 @@
 with lib;
 
 let
+  topPkgs = pkgs;
   cfg = config.testing;
 
   toJSONFile = content: builtins.toFile "json" (builtins.toJSON content);
@@ -37,6 +38,7 @@ let
         domain = "my.xzy";
         nameservers = ["10.0.0.254"];
         firewall = {
+          # enable = false;
           allowedTCPPorts = [
             10250 # kubelet
           ];
@@ -47,7 +49,8 @@ let
           '') (attrValues nodes);
         };
       };
-      environment.systemPackages = [ pkgs.kubectl ];
+      # It's a hack to use topPkgs here! But somehow "pkgs" does not contain overlays provided from the caller of this file.
+      environment.systemPackages = [ (builtins.trace "YYY testing.nix systemPackages ${topPkgs.kubectl}" topPkgs.kubectl) ];
       environment.variables.KUBECONFIG = "/etc/kubernetes/cluster-admin.kubeconfig";
       services.flannel.iface = "eth1";
       services.kubernetes = {
@@ -55,8 +58,11 @@ let
         apiserver = {
           securePort = 443;
           advertiseAddress = master.config.networking.primaryIPAddress;
+          # advertiseAddress = "0.0.0.0";
         };
         masterAddress = "${master.config.networking.hostName}.${master.config.networking.domain}";
+        # needed if you use swap
+        kubelet.extraOpts = "--fail-swap-on=false";
       };
 
       systemd.extraConfig = "DefaultLimitNOFILE=1048576";
@@ -100,10 +106,16 @@ let
         networking.primaryIPAddress = mkForce "192.168.1.1";
       };
 
+      # ENV1 = true;
       testScript = ''
+        print("Starting NixOS test units...")
         start_all()
+        print("Started NixOS test units.")
+        print(kube.execute("kubectl get node"))
 
+        print("Waiting for kube.my.xzy to get ready...")
         kube.wait_until_succeeds("kubectl get node kube.my.xzy | grep -w Ready")
+        print("Node kube.my.xzy is ready!")
 
         ${testScript}''; # can not have a leading newline due to formatting requirements
     };

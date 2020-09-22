@@ -1,0 +1,5 @@
+1600349176.278878 @nix {"action":"start","id":115233972551680,"level":3,"text":"evaluating file '/home/gleber/code/nix/inst/share/nix/corepkgs/derivation.nix'","type":113}
+1600349176.278942 @nix {"action":"stop","id":115233972551680}
+1600349176.278974 @nix {"action":"start","id":115233972551681,"level":3,"text":"evaluating file '/home/gleber/code/kubenix/default.nix'","type":113}
+1600349176.279002 @nix {"action":"stop","id":115233972551681}
+1600349176.279029 @nix {"action":"msg","id":0,"level":0,"msg":"\u001b[31;1merror:\u001b[0m\u001b[34;1m --- AttrPathNotFound --- nix\u001b[0m\nattribute '\u001b[33;1mresult\u001b[0m' in selection path '\u001b[33;1mresult\u001b[0m' not found"}

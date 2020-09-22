@@ -1,7 +1,22 @@
-{ pkgs ? import <nixpkgs> {}, nixosPath ? toString <nixpkgs/nixos>, lib ? pkgs.lib }:
+{ pkgsPath # ? <nixpkgs>
+, nixosPath ? "${pkgsPath}/nixos"
+}:
+
+let
+  pkgs = import pkgsPath {
+    overlays = [ (self: super: rec {
+      kubernetes = builtins.trace "YYY k8s default.nix overlay" (super.kubernetes.overrideAttrs (oa: {
+        src = lib.cleanSource /home/gleber/code/kubernetes;
+      }));
+      kubectl = builtins.trace "YYY default.nix overlay" (super.kubectl.overrideAttrs (oa: {
+        src = kubernetes;
+      }));
+    })];
+  };
+  lib =  pkgs.lib;
+in
 
 with lib;
-
 let
   kubenixLib = import ./lib { inherit lib pkgs; };
   lib' = lib.extend (lib: self: import ./lib/extra.nix { inherit lib pkgs; });

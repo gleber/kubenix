@@ -33,9 +33,32 @@ in {
   kubernetes.resources.configMaps.nginx-config.data."nginx.conf" = ''
     user nginx nginx;
     daemon off;
+
     error_log /dev/stdout info;
+
+
     pid /dev/null;
+
+
+
     events {}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     http {
       access_log /dev/stdout;
       server {

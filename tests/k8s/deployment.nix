@@ -29,6 +29,11 @@ in {
     extraConfiguration = {
       environment.systemPackages = [ pkgs.curl ];
       services.kubernetes.kubelet.seedDockerImages = config.docker.export;
+      services.kubernetes.apiserver.verbosity = 0;
+      services.kubernetes.kubelet.verbosity = 0;
+      services.kubernetes.proxy.verbosity = 0;
+      services.kubernetes.scheduler.verbosity = 0;
+      services.kubernetes.controllerManager.verbosity = 0;
     };
     testScript = ''
       kube.wait_until_succeeds(
